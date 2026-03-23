@@ -1,20 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+
+public class PlayerControllerTutorialUpdates : MonoBehaviour
 {
+    public InputAction moveAction;
     // Start is called before the first frame update
     void Start()
     {
-        
+        moveAction.Enable();
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 position = transform.position;
-        position.x = position.x + 0.1f;
+        Vector2 move = moveAction.ReadValue<Vector2>();
+        Vector2 position = (Vector2)transform.position + move * 0.1f;
         transform.position = position;
     }
+
 }
