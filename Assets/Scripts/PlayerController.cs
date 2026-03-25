@@ -14,12 +14,15 @@ public class PlayerController : MonoBehaviour
     int currentHealth;
     Vector2 move;
     public float speed = 3.0f;
+    public float timeInvincible = 2.0f;
+    bool isInvincible;
+    float damageCooldown;
     // Start is called before the first frame update
     void Start()
     {
         moveAction.Enable();
         rigidbody2D = GetComponent<Rigidbody2D>();
-        // currentHealth = maxHealth;
+        currentHealth = maxHealth;
     }
 
 
@@ -28,6 +31,14 @@ public class PlayerController : MonoBehaviour
     {
         move = moveAction.ReadValue<Vector2>();
         // Debug.Log("Object that entered the trigger: " + other);
+        if (isInvincible)
+        {
+            damageCooldown -= Time.deltaTime;
+            if (damageCooldown < 0)
+            {
+                isInvincible = false;
+            }
+        }
     }
     void FixedUpdate()
     {
@@ -36,6 +47,15 @@ public class PlayerController : MonoBehaviour
     }
     public void changeHealth(int amount = 1)
     {
+        if (amount < 0)
+        {
+            if (isInvincible)
+            {
+                return;
+            }
+            isInvincible = true;
+            damageCooldown = timeInvincible;
+        }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log(currentHealth + "/" + maxHealth);
     }
