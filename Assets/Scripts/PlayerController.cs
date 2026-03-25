@@ -5,11 +5,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class PlayerControllerTutorialUpdates : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public InputAction moveAction;
     Rigidbody2D rigidbody2D;
     public int maxHealth = 5;
+    public int health { get { return currentHealth; }}
     int currentHealth;
     Vector2 move;
     public float speed = 3.0f;
@@ -17,8 +18,8 @@ public class PlayerControllerTutorialUpdates : MonoBehaviour
     void Start()
     {
         moveAction.Enable();
-        currentHealth = maxHealth;
         rigidbody2D = GetComponent<Rigidbody2D>();
+        // currentHealth = maxHealth;
     }
 
 
@@ -26,14 +27,14 @@ public class PlayerControllerTutorialUpdates : MonoBehaviour
     void Update()
     {
         move = moveAction.ReadValue<Vector2>();
-        Debug.Log(move);
+        // Debug.Log("Object that entered the trigger: " + other);
     }
     void FixedUpdate()
     {
         Vector2 position = (Vector2)transform.position + move * speed * Time.fixedDeltaTime;
         rigidbody2D.MovePosition(position);
     }
-    void changeHealth(int amount)
+    public void changeHealth(int amount = 1)
     {
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log(currentHealth + "/" + maxHealth);
