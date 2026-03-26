@@ -11,6 +11,8 @@ public class EnemyController : MonoBehaviour
     float timer;
     int direction = 1;
     Animator animator;
+    AudioSource audioSource;
+    public AudioClip enemyHitClip;
     bool broken = true;
     // Start is called before the first frame update
     void Start()
@@ -18,6 +20,7 @@ public class EnemyController : MonoBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
         timer = changeTime;
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -60,10 +63,22 @@ public class EnemyController : MonoBehaviour
            player.changeHealth(-1);
         }
     }
+    public void HitByProjectile()
+    {
+        if (audioSource != null && enemyHitClip != null)
+        {
+            audioSource.PlayOneShot(enemyHitClip);
+        }
+
+        Fix();
+    }
+
     public void Fix()
     {
         broken = false;
         rigidbody2D.simulated = false;
         animator.SetTrigger("Fixed");
+        // Don't stop audio here so hit sound can play
+        // if you have looping enemy movement sound, manage it via separate logic when fixed
     }
 }

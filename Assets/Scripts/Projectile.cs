@@ -6,10 +6,13 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     Rigidbody2D rigidbody2d;
+    AudioSource audioSource;
+    public AudioClip enemyHitClip;
     // Start is called before the first frame update
     void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -30,8 +33,11 @@ public class Projectile : MonoBehaviour
         EnemyController enemy = other.GetComponent<EnemyController>();
         if (enemy != null)
         {
-            enemy.Fix();
+            enemy.HitByProjectile();
+            Destroy(gameObject);
+            return;
         }
+
         Destroy(gameObject);
     }
 
